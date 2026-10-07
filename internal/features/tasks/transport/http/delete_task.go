@@ -8,6 +8,16 @@ import (
 	core_http_response "github.com/apollobing/todo-app/internal/core/transport/http/response"
 )
 
+// DeleteTask    godoc
+// @Summary      Delete task
+// @Description  Delete an existing task in the system by ID
+// @Tags         tasks
+// @Param        id   path  int  true "ID of the task to delete"
+// @Success      204  "Task deleted successfully"
+// @Failure      400  {object}  core_http_response.ErrorResponse "Bad request"
+// @Failure      404  {object}  core_http_response.ErrorResponse "Task not found"
+// @Failure      500  {object}  core_http_response.ErrorResponse "Internal server error"
+// @Router       /tasks/{id} [delete]
 func (h *TasksHTTPHandler) DeleteTask(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)
