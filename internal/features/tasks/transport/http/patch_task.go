@@ -12,9 +12,9 @@ import (
 )
 
 type PatchTaskRequest struct {
-	Title       core_http_types.Nullable[string] `json:"title"`
-	Description core_http_types.Nullable[string] `json:"description"`
-	Completed   core_http_types.Nullable[bool]   `json:"completed"`
+	Title       core_http_types.Nullable[string] `json:"title"       swaggertype:"string" example:"To walk the dog"`
+	Description core_http_types.Nullable[string] `json:"description" swaggertype:"string" example:"null"`
+	Completed   core_http_types.Nullable[bool]   `json:"completed" swaggertype:"boolean"`
 }
 
 func (r *PatchTaskRequest) Validate() error {
@@ -49,6 +49,25 @@ func (r *PatchTaskRequest) Validate() error {
 
 type PatchUserResponse TaskDTOResponse
 
+// PatchTask     godoc
+// @Summary      Update task
+// @Description  Update information of an existing task in the system
+// @Description  ### Field update logic (Three-state logic):
+// @Description  1. **Field omitted**: `description` is ignored, DB value remains unchanged
+// @Description  2. **Explicit value provided**: `"description": "Go for a walk with Milo at 06:30 AM"` - sets the new description in the DB
+// @Description  3. **null provided**: `"description": null` - clears the field in the DB (set to NULL)
+// @Description  Constraints: `title` and `completed` cannot be set to null
+// @Tags         tasks
+// @Accept       json
+// @Produce      json
+// @Param        id       path      int               true  "ID of the task to update"
+// @Param        request  body      PatchTaskRequest  true  "PatchTask request body"
+// @Success      200      {object}  PatchUserResponse                "Task updated successfully"
+// @Failure      400      {object}  core_http_response.ErrorResponse "Bad request"
+// @Failure      404      {object}  core_http_response.ErrorResponse "Task not found"
+// @Failure      409      {object}  core_http_response.ErrorResponse "Conflict"
+// @Failure      500      {object}  core_http_response.ErrorResponse "Internal server error"
+// @Router       /tasks/{id} [patch]
 func (h *TasksHTTPHandler) PatchTask(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)

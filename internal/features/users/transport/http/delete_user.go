@@ -8,6 +8,16 @@ import (
 	core_http_request "github.com/apollobing/todo-app/internal/core/transport/http/request"
 )
 
+// DeleteUser    godoc
+// @Summary      Delete user
+// @Description  Delete an existing user in the system by ID
+// @Tags         users
+// @Param        id path int true                              "ID of the user to delete"
+// @Success      204                                           "User deleted successfully"
+// @Failure      400 {object} core_http_response.ErrorResponse "Bad request"
+// @Failure      404 {object} core_http_response.ErrorResponse "User not found"
+// @Failure      500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Router       /users/{id} [delete]
 func (h *UsersHTTPHandler) DeleteUser(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)

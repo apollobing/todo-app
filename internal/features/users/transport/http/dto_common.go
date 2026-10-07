@@ -3,10 +3,10 @@ package users_transport_http
 import "github.com/apollobing/todo-app/internal/core/domain"
 
 type UserDTOResponse struct {
-	ID          int     `json:"id"`
-	Version     int     `json:"version"`
-	FullName    string  `json:"full_name"`
-	PhoneNumber *string `json:"phone_number"`
+	ID          int     `json:"id"           example:"10"`
+	Version     int     `json:"version"      example:"3"`
+	FullName    string  `json:"full_name"    example:"John Doe"`
+	PhoneNumber *string `json:"phone_number" example:"+491234567890"`
 }
 
 func userDTOFromDomain(user domain.User) UserDTOResponse {
