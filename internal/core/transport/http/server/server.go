@@ -9,7 +9,7 @@ import (
 	"github.com/apollobing/todo-app/docs"
 	core_logger "github.com/apollobing/todo-app/internal/core/logger"
 	core_http_middleware "github.com/apollobing/todo-app/internal/core/transport/http/middleware"
-	"github.com/swaggo/http-swagger/v2"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 	"go.uber.org/zap"
 )
 
@@ -27,21 +27,29 @@ func NewHTTPServer(
 	middleware ...core_http_middleware.Middleware,
 ) *HTTPServer {
 	return &HTTPServer{
-		mux:    http.NewServeMux(),
-		config: config,
-		log:    log,
+		mux:        http.NewServeMux(),
+		config:     config,
+		log:        log,
 		middleware: middleware,
 	}
 }
 
 func (s *HTTPServer) RegisterAPIRouters(routers ...*APIVersionRouter) {
-	for _, router :=  range routers {
+	for _, router := range routers {
 		prefix := "/api/" + string(router.apiVersion)
 
 		s.mux.Handle(
 			prefix+"/",
 			http.StripPrefix(prefix, router.WithMiddleware()),
 		)
+	}
+}
+
+func (s *HTTPServer) RegisterRoutes(routes ...Route) {
+	for _, route := range routes {
+		pattern := fmt.Sprintf("%s %s", route.Method, route.Path)
+
+		s.mux.Handle(pattern, route.WithMiddleware())
 	}
 }
 
