@@ -1,0 +1,2 @@
+# Exclude HTML from language stats
+public/** linguist-detectable=false
